@@ -9,3 +9,10 @@ class info(People):
     hometown = 'Las Vegas'
     highschool = 'Green Valley high school'
 
+# child class that inherits the parent class
+class Man(People):
+    name = 'sam'
+    Age = 26
+    height = '6ft 5in'
+
+print(Man)
