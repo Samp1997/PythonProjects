@@ -1,12 +1,10 @@
 #setting the class
-class Protected:
-    def __init__(self):
-        self._protectedVar = 0
 
 
 class Protected:
     def __init__(self):
         self.__privateVar = 50
+        self._protectedVar = 0
 # child class
     def getPrivate(self):
         print(self.__privateVar)
