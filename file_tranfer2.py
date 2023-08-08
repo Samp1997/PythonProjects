@@ -3,39 +3,10 @@ from tkinter import *
 import tkinter.filedialog
 import os
 import shutil
+import datetime
+from datetime import timedelta
 class ParentWindow(Frame):
     def __init__(self, master):
-        #Creates button to transfer files
-        self.transfer_btn = Button (text="Transfer Files", width=20, command=self.tranferFiles)
-        #positions the tranfer files button
-        self.transfer_btn.grid(row=2, column=1, padx=(200, 0), pady=(0, 15))
-        def sourceDir(self):
-            selectSourceDir = tkinter.filedialog.askdirectory()
-            #The .delete(D, END) will clear the content that is inserted in the Entry widget,
-            #this allows the path to be inserted into the Entry widget properly.
-            self.source_dir.delete(0, END)
-            #The .insert method will insert the user selection to the source_dir Entry
-            self.source_dir.insert(0, selectSourceDir)
-    def destDir(self):
-        selectSourceDir = tkinter.filedialog.askdirectory()
-        #The .delete(0, END) will clear the content that is inserted in the Entry widget,
-        #this allows the path to br inserted into the Entry widget properly.
-        self.source_dir.delete(0, END)
-        #The .insert method will insert the user selection to the source_dir Entry
-        self.source_dir.insert(0, selectSourceDir)
-    def tranferFiles(self):
-        #Gets source directory
-        source = self.source_dir.get()
-        #Gets destination directory
-        destination = self.destination_dir.get()
-        #Gets a list of the files in the source directory
-        source_files = os.listdir(source)
-        #Runs through each file in the source directory
-        for i in source_files:
-        #moves each file from the source to the destination
-            shutil.move(source + '/' + i, destination)
-        print(i + ' was successfully tranferred.')
-            
         Frame.__init__(self)
         #Sets title of GUI window
         self.master.title("File Transfer")
@@ -62,8 +33,41 @@ class ParentWindow(Frame):
         #the button to ensure they will line up
         self.destination_dir.grid(row=1, column=1, columnspan=2, padx=(20, 10), pady=(15, 10))
 
-        
-
+        #Creates button to transfer files
+        self.transfer_btn = Button (text="Transfer Files", width=20, command=self.tranferFiles)
+        #positions the tranfer files button
+        self.transfer_btn.grid(row=2, column=1, padx=(200, 0), pady=(0, 15))
+    def sourceDir(self):
+        selectSourceDir = tkinter.filedialog.askdirectory()
+        #The .delete(D, END) will clear the content that is inserted in the Entry widget,
+        #this allows the path to be inserted into the Entry widget properly.
+        self.source_dir.delete(0, END)
+        #The .insert method will insert the user selection to the source_dir Entry
+        self.source_dir.insert(0, selectSourceDir)
+    def destDir(self):
+        selectdestDir = tkinter.filedialog.askdirectory()
+        #The .delete(0, END) will clear the content that is inserted in the Entry widget,
+        #this allows the path to br inserted into the Entry widget properly.
+        self.destination_dir.delete(0, END)
+        #The .insert method will insert the user selection to the source_dir Entry
+        self.destination_dir.insert(0, selectdestDir)
+    def tranferFiles(self):
+        #Gets source directory
+        source = self.source_dir.get()
+        #Gets destination directory
+        destination = self.destination_dir.get()
+        #Gets a list of the files in the source directory
+        source_files = os.listdir(source)
+        #Runs through each file in the source directory
+        for i in source_files:
+        #moves each file from the source to the destination
+            filepath = os.path.join(source, i)
+            hours24 = datetime.datetime.now() - timedelta(hours=24)
+            modtime = os.path.getmtime(filepath)
+            datetimefile = datetime.datetime.fromtimestamp(modtime)
+            if hours24 < datetimefile:
+                shutil.move(source + '/' + i, destination)
+                print(i + ' was successfully tranferred.')
 
 if __name__ == "__main__":
     root = tk.Tk()
